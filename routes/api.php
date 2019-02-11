@@ -20,6 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('login', 'Api\PassportController@login');
 Route::post('register', 'Api\PassportController@register');
 
+
+
+
+
+
+
 //rotas que só podem ser acessadas com um user logado
 Route::group(['middleware' => 'auth:api'], function() {
 
@@ -37,12 +43,18 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('user/getLectures', 'UserController@getLectures');
     Route::put('user/subInLecture/{lecture_id}', 'UserController@subInLecture');
     Route::put('user/unsubInLecture/{lecture_id}', 'UserController@unsubInLecture');
+    //Admin*/
+    Route::group([
+      'middleware'=>'admin',
+    ], function($router){
+         Route::apiResource('hotels', 'HotelController');
+    });
+
 
 });
 
 
-// Admin Routes
-Route::apiResource('hotels', 'HotelController');
+
 
 Route::apiResource('rooms', 'RoomController');
 Route::get('room/listUsers/{id}', 'UserController@listUsers');
@@ -55,4 +67,3 @@ Route::apiResource('lectures', 'LectureController');
 Route::get('lecture/listUsers/{id}', 'LectureController@listUsers');
 Route::put('lecture/subInLecture/{lecture_id}', 'LectureController@subInLecture');
 Route::put('lecture/unsubInLecture/{lecture_id}', 'LectureController@unsubInLecture');
-
